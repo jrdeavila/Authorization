@@ -58,17 +58,13 @@
                         @csrf
                         <x-adminlte-input name="name" label="Nombre del Permiso" required
                             placeholder="Ingrese el nombre del permiso" />
-
                         <x-adminlte-input name="guard_name" label="Guard Name" value="web" required
                             placeholder="Ingrese el guard name" />
+                        <x-adminlte-button class="btn-flat" type="submit" icon="fas fa-save" label="Guardar" />
+
                         <x-slot name="footerSlot">
-                            <x-adminlte-button class="btn-flat" type="submit" form="createPermissionForm"
-                                icon="fas fa-save" label="Guardar" />
-                            <x-adminlte-button class="btn-flat" data-dismiss="modal" icon="fas fa-times" label="Cancelar" />
-                            <x-adminlte-button class="btn-flat" type="reset" form="createPermissionForm"
-                                icon="fas fa-undo" label="Limpiar" />
+                        </x-slot>
                     </form>
-                    </x-slot>
                 </x-adminlte-modal>
 
 

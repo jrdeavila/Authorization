@@ -18,6 +18,7 @@ class RolePermissionSeeder extends Seeder
             'superadmin',
             'employee',
             'technical-sheet-manager',
+            'activity-manager',
         ];
 
         // Grouped
@@ -103,8 +104,13 @@ class RolePermissionSeeder extends Seeder
             $model = Role::where('name', $role)->first();
             if (array_key_exists($role, $rolesWithPermissionsGroup)) {
                 foreach ($rolesWithPermissionsGroup[$role] as $group) {
-                    foreach ($permissions[$group] as $permission) {
-                        $p = Permission::where('name', $group . '-' . $permission)->first();
+                    if (is_array($group)) {
+                        foreach ($permissions[$group] as $permission) {
+                            $p = Permission::where('name', $group . '-' . $permission)->first();
+                            $model->givePermissionTo($p);
+                        }
+                    } else {
+                        $p = Permission::where('name', $group)->first();
                         $model->givePermissionTo($p);
                     }
                 }

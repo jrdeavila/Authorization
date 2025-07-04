@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:roles-read')->only('index');
+        $this->middleware('can:roles-create')->only('create', 'store');
+        $this->middleware('can:roles-update')->only('update');
+        $this->middleware('can:roles-delete')->only('destroy');
+    }
+
     public function index(Request $request)
     {
         $roleId = $request->get('role_id');

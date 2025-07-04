@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:users-read')->only('index');
+        $this->middleware('can:users-create')->only('create', 'store');
+        $this->middleware('can:users-update')->only('update');
+        $this->middleware('can:show-activity-owner')->only('show');
+        $this->middleware('can:show-user-curriculum')->only('resume');
+    }
     public function index(Request $request)
     {
         $userId = $request->get('user_id');
@@ -52,6 +60,13 @@ class UserController extends Controller
             DB::rollBack();
             return redirect()->route('users.index', ['user_id' => $user->id])->with('error', 'Error al actualizar el usuario');
         }
+    }
+
+    public function show(User $user)
+    {
+        $roles = Role::all();
+        $permissions = Permission::all();
+        return view('pages.users.show', compact('user', 'roles', 'permissions'));
     }
 
     public function resume(User $user)

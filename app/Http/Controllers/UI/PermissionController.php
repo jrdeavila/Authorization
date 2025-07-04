@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:permissions-read')->only('index');
+        $this->middleware('can:permissions-create')->only('create', 'store');
+        $this->middleware('can:permissions-update')->only('edit', 'update');
+        $this->middleware('can:permissions-delete')->only('destroy');
+    }
     public function index()
     {
         $permissions = Permission::paginate(10);

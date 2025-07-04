@@ -53,6 +53,7 @@ class RolePermissionSeeder extends Seeder
             'show-activity-owner',
             'create-activity',
             'view-activity-report',
+            'assign-activity',
         ];
         $rolesWithPermissionsGroup = [
             'admin' => [
@@ -64,6 +65,16 @@ class RolePermissionSeeder extends Seeder
             'technical-sheet-manager' => [
                 'technical-sheets',
             ],
+            'activity-manager' => [
+                'list-activities',
+                'view-activity',
+                'edit-activity',
+                'delete-activity',
+                'show-activity-owner',
+                'create-activity',
+                'view-activity-report',
+                'assign-activity',
+            ]
         ];
 
         // Crear roles

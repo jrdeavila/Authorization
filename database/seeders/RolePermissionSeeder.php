@@ -39,7 +39,6 @@ class RolePermissionSeeder extends Seeder
                 'create-technical-sheet',
             ],
             'activity-manager' => [
-                'list-activities',
                 'view-activity',
                 'edit-activity',
                 'delete-activity',
@@ -52,12 +51,20 @@ class RolePermissionSeeder extends Seeder
                 'all-permissions'
             ],
             'employee' => [],
+            'activity-user' => [
+                'list-activities',
+                'view-activity',
+                'create-activity',
+            ]
         ];
 
         foreach ($roles as $role => $permissions) {
             $role = Role::create(['name' => $role, 'guard_name' => 'web']);
             foreach ($permissions as $permission) {
-                $permission = Permission::create(['name' => $permission, 'guard_name' => 'web']);
+                $p = Permission::firstWhere('name', $permission);
+                if (!$p) {
+                    $p = Permission::create(['name' => $permission]);
+                }
                 $role->givePermissionTo($permission);
             }
         }
@@ -80,5 +87,26 @@ class RolePermissionSeeder extends Seeder
         }
 
         $user->assignRole('superadmin');
+
+        echo "Asignar rol de activity-manager a usuario con dni 1065655810" . PHP_EOL;
+        $user = User::whereHas('employee', function ($query) {
+            $query->where('noDocumento', '1065655810');
+        })->first();
+        $user->assignRole('activity-manager');
+
+        echo "Asignado rol de activity-user a todos los usuarios de aseo general" . PHP_EOL;
+        $dnis = [
+            "57428394",
+            "49605295",
+            "39464002",
+            "39463873",
+        ];
+
+        foreach ($dnis as $dni) {
+            $user = User::whereHas('employee', function ($query) use ($dni) {
+                $query->where('noDocumento', $dni);
+            })->first();
+            $user->assignRole('activity-user');
+        }
     }
 }

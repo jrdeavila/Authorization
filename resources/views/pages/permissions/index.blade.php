@@ -1,22 +1,30 @@
 @extends('layouts.app')
 
+@php
+
+@endphp
+
 @section('content')
     <div class="row justify-content-center py-3">
         <div class="col-md-12">
-            @session('success')
-                <blockquote class="quote quote-success">
-                    <h5>Genial! 👍<h5>
-
-                            <p>{{ session('success') }}</p>
-                </blockquote>
-            @endsession
+            @foreach (['error', 'success'] as $msg)
+                @if (session()->has($msg))
+                    <div class="alert alert-{{ $msg == 'error' ? 'danger' : $msg }} alert-dismissible fade show"
+                        role="alert">
+                        {{ session($msg) }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
+            @endforeach
         </div>
-        <div class="col-md-8">
+        <div x-data="app()" class="col-md-8">
+
             <x-adminlte-card theme="light" title="Permisos" icon="fas fa-lock">
                 <x-slot name="toolsSlot">
                     @can('permissions-create')
-                        <x-adminlte-button class="btn-flat" icon="fas fa-plus" label="Crear Permiso" data-toggle="modal"
-                            data-target="#createPermissionModal" />
+                        <x-adminlte-button theme="primary" icon="fas fa-plus" label="Crear Permiso" x-on:click="onCreate" />
                     @endcan
                 </x-slot>
 
@@ -52,26 +60,6 @@
                     </tr>
                 </x-adminlte-datatable>
 
-                <x-adminlte-modal id="createPermissionModal" title="Crear Permiso" theme="primary" icon="fas fa-plus"
-                    size="lg" scrollable>
-                    <form action="{{ route('permissions.store') }}" method="POST">
-                        @csrf
-                        <x-adminlte-input name="name" label="Nombre del Permiso" required
-                            placeholder="Ingrese el nombre del permiso" />
-
-                        <x-adminlte-input name="guard_name" label="Guard Name" value="web" required
-                            placeholder="Ingrese el guard name" />
-                        <x-slot name="footerSlot">
-                            <x-adminlte-button class="btn-flat" type="submit" form="createPermissionForm"
-                                icon="fas fa-save" label="Guardar" />
-                            <x-adminlte-button class="btn-flat" data-dismiss="modal" icon="fas fa-times" label="Cancelar" />
-                            <x-adminlte-button class="btn-flat" type="reset" form="createPermissionForm"
-                                icon="fas fa-undo" label="Limpiar" />
-                    </form>
-                    </x-slot>
-                </x-adminlte-modal>
-
-
             </x-adminlte-card>
 
         </div>
@@ -79,14 +67,47 @@
 @endsection
 
 @push('js')
-    <script>
-        // Todos los botones que sean tipo submit
-        $(document).load(function() {
-            $('button[type="submit"]').on('click', function() {
-                // Hacer submit al form padre
-                $(this).closest('form').submit();
-            });
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+    <script src="{{ asset('vendor/sweetalert2/sweetalert2.all.min.js') }}" defer></script>
 
-        });
+    <script>
+        function app() {
+            return {
+                onCreate() {
+                    let sweetalert = Swal.mixin({
+                        customClass: {
+                            confirmButton: 'btn btn-success',
+                            cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    })
+                    // Se necesita el nombre y guard name
+                    sweetalert.fire({
+                        title: 'Crear Permiso',
+                        html: `
+                            <form id="permissionForm" class="form-horizontal" method="POST" action="{{ route('permissions.store') }}">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="name">Nombre del Permiso</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="guard_name">Guard Name</label>
+                                    <input type="text" class="form-control" id="guard_name" name="guard_name" required>
+                                </div>
+                            </form>
+                        `,
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: 'Crear',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('permissionForm').submit();
+                        }
+                    })
+                }
+            }
+        }
     </script>
 @endpush

@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'Authorización',
+    'title' => strtoupper(env('APP_NAME')),
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,9 +63,9 @@ return [
     |
     */
 
-    'logo' => '<strong>Autorización</strong>',
-    'logo_img' => 'img/logos/white.png',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
+    'logo' => '<b>' . strtoupper(env('APP_NAME')) . '</b>',
+    'logo_img' => 'img/logos/default.png',
+    'logo_img_class' => 'brand-image img-circle bg-white',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
     'logo_img_alt' => 'Admin Logo',
@@ -84,7 +84,7 @@ return [
     */
 
     'auth_logo' => [
-        'enabled' => true,
+        'enabled' => false,
         'img' => [
             'path' => 'img/logos/default.png',
             'alt' => 'Auth Logo',
@@ -113,11 +113,11 @@ return [
         'enabled' => true,
         'mode' => 'fullscreen',
         'img' => [
-            'path' => 'img/logos/preloader.png',
-            'alt' => 'Camara de Comercio de Valledupar',
+            'path' => 'img/logos/default.png',
+            'alt' => 'AdminLTE Preloader Image',
             'effect' => 'animation__shake',
-            'width' => 200,
-            'height' => 200,
+            'width' => 150,
+            'height' => 150,
         ],
     ],
 
@@ -134,8 +134,8 @@ return [
     */
 
     'usermenu_enabled' => true,
-    'usermenu_header' => true,
-    'usermenu_header_class' => 'bg-secondary',
+    'usermenu_header' => false,
+    'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => true,
     'usermenu_desc' => true,
     'usermenu_profile_url' => false,
@@ -171,11 +171,11 @@ return [
     |
     */
 
-    'classes_auth_card' => 'card-outline card-primary',
-    'classes_auth_header' => '',
+    'classes_auth_card' => '',
+    'classes_auth_header' => 'bg-gradient-primary',
     'classes_auth_body' => '',
-    'classes_auth_footer' => '',
-    'classes_auth_icon' => '',
+    'classes_auth_footer' => 'text-center',
+    'classes_auth_icon' => 'fa-lg text-primary',
     'classes_auth_btn' => 'btn-flat btn-primary',
 
     /*
@@ -196,8 +196,8 @@ return [
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-primary elevation-4',
-    'classes_sidebar_nav' => '',
+    'classes_sidebar' => 'position-fixed sidebar-light-secondary elevation-1',
+    'classes_sidebar_nav' => 'text-white',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
@@ -215,8 +215,8 @@ return [
     */
 
     'sidebar_mini' => 'lg',
-    'sidebar_collapse' => false,
-    'sidebar_collapse_auto_size' => false,
+    'sidebar_collapse' => true,
+    'sidebar_collapse_auto_size' => true,
     'sidebar_collapse_remember' => false,
     'sidebar_collapse_remember_no_transition' => true,
     'sidebar_scrollbar_theme' => 'os-theme-light',
@@ -263,7 +263,7 @@ return [
     'register_url' => 'register',
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
-    'profile_url' => false,
+    'profile_url' => true,
     'disable_darkmode_routes' => false,
 
     /*
@@ -284,7 +284,7 @@ return [
 
     'laravel_asset_bundling' => false,
     'laravel_css_path' => 'css/app.css',
-    'laravel_js_path' => 'js/app.js',
+    'laravel_js_path' => 'js/app2.js',
 
     /*
     |--------------------------------------------------------------------------

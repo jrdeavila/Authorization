@@ -12,93 +12,68 @@ class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        // Permisos para crear mas permisos
-        $roles = [
-            'admin',
-            'superadmin',
-            'employee',
-            'technical-sheet-manager',
-        ];
 
-        // Grouped
-        $permissions = [
-            'permissions' => [
-                'create',
-                'read',
-                'update',
-                'delete',
-            ],
-            'roles' => [
-                'create',
-                'read',
-                'update',
-                'delete',
-            ],
-            'users' => [
-                'create',
-                'read',
-                'update',
-                'delete',
-            ],
-            'technical-sheets' => [
-                'create',
-                'read',
-                'update',
-                'delete',
-            ],
-            'list-activities',
-            'view-activity',
-            'edit-activity',
-            'delete-activity',
-            'show-activity-owner',
-            'create-activity',
-            'view-activity-report',
-        ];
-        $rolesWithPermissionsGroup = [
+        $roles = [
             'admin' => [
-                'permissions',
-                'roles',
-                'users',
-                'technical-sheets',
+                'list-users',
+                'view-user',
+                'edit-user',
+                'delete-user',
+                'create-user',
+                'list-roles',
+                'view-role',
+                'edit-role',
+                'delete-role',
+                'create-role',
+                'list-permissions',
+                'view-permission',
+                'edit-permission',
+                'delete-permission',
+                'create-permission',
             ],
             'technical-sheet-manager' => [
-                'technical-sheets',
+                'list-technical-sheets',
+                'view-technical-sheet',
+                'edit-technical-sheet',
+                'delete-technical-sheet',
+                'create-technical-sheet',
             ],
+            'activity-manager' => [
+                'view-activity',
+                'edit-activity',
+                'delete-activity',
+                'show-activity-owner',
+                'create-activity',
+                'view-activity-report',
+                'assign-activity',
+            ],
+            'superadmin' => [
+                'all-permissions'
+            ],
+            'employee' => [],
+            'activity-user' => [
+                'list-activities',
+                'view-activity',
+                'create-activity',
+            ]
         ];
 
-        // Crear roles
-        foreach ($roles as $role) {
-            Role::create(['name' => $role, 'guard_name' => 'web']);
-        }
-
-        echo 'Roles creados' . PHP_EOL;
-
-        // Crear permisos
-        foreach ($permissions as $group => $records) {
-            if (is_array($records)) {
-                foreach ($records as $permission) {
-                    Permission::create(['name' => $group . '-' . $permission, 'guard_name' => 'web']);
+        foreach ($roles as $role => $permissions) {
+            $role = Role::create(['name' => $role, 'guard_name' => 'web']);
+            foreach ($permissions as $permission) {
+                $p = Permission::firstWhere('name', $permission);
+                if (!$p) {
+                    $p = Permission::create(['name' => $permission]);
                 }
-            }
-            if (is_string($records)) {
-                Permission::create(['name' => $records, 'guard_name' => 'web']);
+                $role->givePermissionTo($permission);
             }
         }
 
-        echo 'Permisos creados' . PHP_EOL;
 
-        // Asignar permisos
-        foreach ($roles as $role) {
-            $model = Role::where('name', $role)->first();
-            if (array_key_exists($role, $rolesWithPermissionsGroup)) {
-                foreach ($rolesWithPermissionsGroup[$role] as $group) {
-                    foreach ($permissions[$group] as $permission) {
-                        $p = Permission::where('name', $group . '-' . $permission)->first();
-                        $model->givePermissionTo($p);
-                    }
-                }
-            }
-        }
+
+
+
+
 
         echo 'Asignar rol de superadmin a usuario con dni 1003316620' . PHP_EOL;
         $user = User::whereHas('employee', function ($query) {
@@ -112,5 +87,26 @@ class RolePermissionSeeder extends Seeder
         }
 
         $user->assignRole('superadmin');
+
+        echo "Asignar rol de activity-manager a usuario con dni 1065655810" . PHP_EOL;
+        $user = User::whereHas('employee', function ($query) {
+            $query->where('noDocumento', '1065655810');
+        })->first();
+        $user->assignRole('activity-manager');
+
+        echo "Asignado rol de activity-user a todos los usuarios de aseo general" . PHP_EOL;
+        $dnis = [
+            "57428394",
+            "49605295",
+            "39464002",
+            "39463873",
+        ];
+
+        foreach ($dnis as $dni) {
+            $user = User::whereHas('employee', function ($query) use ($dni) {
+                $query->where('noDocumento', $dni);
+            })->first();
+            $user->assignRole('activity-user');
+        }
     }
 }

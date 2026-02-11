@@ -3537,3 +3537,53 @@
 [01-Jul-2025 01:40:25 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home/ccvalledupar/public_html/servicios/Authorization/vendor/composer/platform_check.php on line 24
 [01-Jul-2025 01:41:25 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home/ccvalledupar/public_html/servicios/Authorization/vendor/composer/platform_check.php on line 24
 [01-Jul-2025 01:41:25 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home/ccvalledupar/public_html/servicios/Authorization/vendor/composer/platform_check.php on line 24
+[04-Dec-2025 15:42:04 UTC] PHP Warning:  require(/home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/vendor/autoload.php): Failed to open stream: No such file or directory in /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/artisan on line 10
+[04-Dec-2025 15:42:04 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/artisan:10
+Stack trace:
+#0 {main}
+  thrown in /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/artisan on line 10
+[09-Feb-2026 14:18:21 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Illuminate\Support\Facades\Route::getTable() in Command line code:26
+Stack trace:
+#0 {main}
+  thrown in Command line code on line 26
+[09-Feb-2026 21:32:34 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Illuminate\Support\Facades\Route::getTable() in Command line code:26
+Stack trace:
+#0 {main}
+  thrown in Command line code on line 26
+[09-Feb-2026 21:48:18 UTC] PHP Fatal error:  Uncaught Error: __VSCODE_LARAVEL_STARTUP_ERROR__: syntax error, unexpected single-quoted string "model_has_roles", expecting "]" in /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/vendor/_laravel_ide/discover-6d96201ad95cad12367117063c707ebf.php:33
+Stack trace:
+#0 /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/vendor/_laravel_ide/discover-6d96201ad95cad12367117063c707ebf.php(62): LaravelVsCode::startupError(Object(ParseError))
+#1 {main}
+  thrown in /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/vendor/_laravel_ide/discover-6d96201ad95cad12367117063c707ebf.php on line 33
+[09-Feb-2026 21:48:18 UTC] PHP Fatal error:  Uncaught Error: __VSCODE_LARAVEL_STARTUP_ERROR__: syntax error, unexpected single-quoted string "model_has_roles", expecting "]" in /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/vendor/_laravel_ide/discover-5802e590a92e23606bb54d2909564178.php:33
+Stack trace:
+#0 /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/vendor/_laravel_ide/discover-5802e590a92e23606bb54d2909564178.php(62): LaravelVsCode::startupError(Object(ParseError))
+#1 {main}
+  thrown in /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/vendor/_laravel_ide/discover-5802e590a92e23606bb54d2909564178.php on line 33
+[09-Feb-2026 21:48:27 UTC] PHP Fatal error:  Uncaught Error: __VSCODE_LARAVEL_STARTUP_ERROR__: syntax error, unexpected single-quoted string "model_has_roles", expecting "]" in /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/vendor/_laravel_ide/discover-6d96201ad95cad12367117063c707ebf.php:33
+Stack trace:
+#0 /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/vendor/_laravel_ide/discover-6d96201ad95cad12367117063c707ebf.php(62): LaravelVsCode::startupError(Object(ParseError))
+#1 {main}
+  thrown in /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/vendor/_laravel_ide/discover-6d96201ad95cad12367117063c707ebf.php on line 33
+[09-Feb-2026 21:48:27 UTC] PHP Fatal error:  Uncaught Error: __VSCODE_LARAVEL_STARTUP_ERROR__: syntax error, unexpected single-quoted string "model_has_roles", expecting "]" in /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/vendor/_laravel_ide/discover-5802e590a92e23606bb54d2909564178.php:33
+Stack trace:
+#0 /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/vendor/_laravel_ide/discover-5802e590a92e23606bb54d2909564178.php(62): LaravelVsCode::startupError(Object(ParseError))
+#1 {main}
+  thrown in /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/vendor/_laravel_ide/discover-5802e590a92e23606bb54d2909564178.php on line 33
+[10-Feb-2026 20:37:43 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Illuminate\Support\Facades\DB::getTable() in Command line code:26
+Stack trace:
+#0 {main}
+  thrown in Command line code on line 26
+[10-Feb-2026 20:38:07 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Illuminate\Support\Facades\DB::getTable() in Command line code:26
+Stack trace:
+#0 {main}
+  thrown in Command line code on line 26
+[10-Feb-2026 20:38:13 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Illuminate\Support\Facades\DB::getTable() in Command line code:26
+Stack trace:
+#0 {main}
+  thrown in Command line code on line 26
+[10-Feb-2026 20:38:14 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Illuminate\Support\Facades\DB::getTable() in Command line code:26
+Stack trace:
+#0 {main}
+  thrown in Command line code on line 26
+[10-Feb-2026 22:32:08 UTC] PHP Parse error:  syntax error, unexpected token "<", expecting end of file in /home/ccvalledupar/public_html/autorizacion.ccvalledupar.org.co/app/Models/User.php on line 12

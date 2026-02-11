@@ -6,6 +6,8 @@ use App\Http\Controllers\UI\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+use function Symfony\Component\String\u;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -29,14 +31,14 @@ Route::middleware(['auth'])->group(function () {
         'can:roles-update',
         'can:roles-delete',
     ])->resource('roles', RoleController::class)
-        ->only('index', 'store', 'update')
+        ->only('index', 'store', 'update', 'destroy')
         ->names('roles');
-    Route::middleware([
-        'can:permissions-read',
-        'can:permissions-create',
-        'can:permissions-update',
-        'can:permissions-delete',
-    ])->resource('permissions', PermissionController::class)
-        ->only('index', 'store')
-        ->names('permissions');
+Route::middleware([
+    'can:permissions-read',
+    'can:permissions-create',
+    'can:permissions-update',
+    'can:permissions-delete',
+])->resource('permissions', PermissionController::class)
+    ->only('index', 'store','update', 'destroy')
+    ->names('permissions');
 });

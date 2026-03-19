@@ -64,14 +64,25 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Logo */
-        .welcome-logo {
-            width: 90px;
-            height: 90px;
-            margin: 0 auto 24px;
+        /* Logo de fondo */
+        .welcome-logo-bg {
+            position: absolute;
+            right: -5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 450px;
+            height: 450px;
+            object-fit: contain;
             filter: brightness(0) invert(1);
-            opacity: 0.95;
-            animation: fadeInUp 0.6s ease-out 0.1s both;
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 0;
+            animation: fadeIn 1.2s ease-out 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 0.04; }
         }
 
         /* Textos */
@@ -219,16 +230,16 @@
             .welcome-title { font-size: 1.3rem; }
             .welcome-subtitle { font-size: 0.85rem; margin-bottom: 28px; }
             .welcome-card { padding: 22px 18px; }
-            .welcome-logo { width: 70px; height: 70px; }
             .welcome-btn { padding: 14px 20px; font-size: 0.92rem; }
+            .welcome-logo-bg { width: 280px; height: 280px; right: -15%; }
         }
     </style>
 </head>
 <body>
     <div class="welcome-page">
-        <div class="welcome-content">
-            <img src="{{ asset('img/logo.png') }}" alt="Logo" class="welcome-logo">
+        <img src="{{ asset('img/logo.png') }}" alt="" class="welcome-logo-bg">
 
+        <div class="welcome-content">
             <div class="welcome-badge">
                 <i class="fas fa-shield-alt"></i>
                 Sistema de Autorización

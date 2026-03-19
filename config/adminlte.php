@@ -64,7 +64,7 @@ return [
     */
 
     'logo' => '<strong>Autorización</strong>',
-    'logo_img' => 'img/logos/white.png',
+    'logo_img' => 'img/logo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -315,27 +315,15 @@ return [
             'text' => 'Buscar',
         ],
         [
-            'text' => 'Permisos',
-            'route' => 'permissions.index',
-            'icon' => 'fas fa-lock',
-            'can' => 'permissions-read',
-            'route' => 'permissions.index',
-
+            'text'    => 'Gestión de Permisos',
+            'icon'    => 'fas fa-shield-alt',
+            'submenu' => [
+                ['text' => 'Roles',        'url' => 'permissions/roles',        'icon' => 'fas fa-user-tag', 'can' => 'manage-roles'],
+                ['text' => 'Permisos',     'url' => 'permissions/permissions',  'icon' => 'fas fa-key',      'can' => 'manage-permissions'],
+                ['text' => 'Funcionarios', 'url' => 'permissions/users',        'icon' => 'fas fa-users',    'can' => 'assign-permissions'],
+                ['text' => 'Auditoría',    'url' => 'permissions/audit',        'icon' => 'fas fa-history',  'can' => 'view-audit'],
+            ],
         ],
-        [
-            'text' => 'Roles',
-            'route' => 'roles.index',
-            'icon' => 'fas fa-users-cog',
-            'can' => 'roles-read',
-            'route' => 'roles.index',
-        ],
-        [
-            'text' => 'Usuarios',
-            'route' => 'users.index',
-            'icon' => 'fas fa-users',
-            'can' => 'users-read',
-            'route' => 'users.index',
-        ]
 
     ],
 

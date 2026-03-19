@@ -40,3 +40,5 @@ Route::middleware(['auth'])->group(function () {
         ->only('index', 'store')
         ->names('permissions');
 });
+
+require __DIR__.'/permissions.php';

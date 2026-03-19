@@ -23,5 +23,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::before(function ($user, $ability) {
             return $user->hasRole('superadmin') ? true : null;
         });
+
+        Gate::define('manage-roles', fn($user) => $user->hasPermissionTo('roles.manage'));
+        Gate::define('manage-permissions', fn($user) => $user->hasPermissionTo('permissions.manage'));
+        Gate::define('assign-permissions', fn($user) => $user->hasPermissionTo('users.assign'));
+        Gate::define('view-audit', fn($user) => $user->hasAnyPermission(['audit.view', 'roles.manage']));
     }
 }

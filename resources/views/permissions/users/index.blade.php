@@ -1,6 +1,16 @@
-@extends('adminlte::page')
+@extends('permissions.layouts.app')
 
 @section('title', 'Funcionarios - Permisos')
+
+@push('css')
+<style>
+@media (max-width: 767.98px) {
+    .card-header .input-group {
+        min-width: 100%;
+    }
+}
+</style>
+@endpush
 
 @section('content_header')
 <h1 class="m-0 text-dark">Funcionarios</h1>
@@ -10,7 +20,7 @@
 </ol>
 @endsection
 
-@section('content')
+@section('module_content')
 <div class="container-fluid py-4">
 
     @if(session('success'))
@@ -21,10 +31,10 @@
     @endif
 
     <div class="card shadow-sm border-0">
-        <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
+        <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center flex-wrap">
             <h3 class="card-title mb-0"><i class="fas fa-users mr-2"></i>Funcionarios</h3>
-            <div class="d-flex align-items-center">
-                <form action="{{ route('permissions.users.index') }}" method="GET" class="mr-2">
+            <div class="d-flex align-items-center flex-wrap" style="gap: 0.5rem;">
+                <form action="{{ route('permissions.users.index') }}" method="GET">
                     <div class="input-group input-group-sm">
                         <input type="text" name="search" class="form-control" placeholder="Buscar..." value="{{ request('search') }}" aria-label="Buscar funcionarios" style="border-radius: 20px 0 0 20px;">
                         <div class="input-group-append">
@@ -45,9 +55,9 @@
                     <thead class="thead-light">
                         <tr>
                             <th>Funcionario</th>
-                            <th>Cargo</th>
+                            <th class="d-none d-md-table-cell">Cargo</th>
                             <th class="text-center">Roles</th>
-                            <th class="text-center">Permisos Directos</th>
+                            <th class="text-center d-none d-md-table-cell">Permisos Directos</th>
                             <th class="text-right">Acciones</th>
                         </tr>
                     </thead>
@@ -66,7 +76,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="text-muted">{{ $user->employee->job->name ?? 'Sin cargo' }}</td>
+                                <td class="text-muted d-none d-md-table-cell">{{ $user->employee->job->name ?? 'Sin cargo' }}</td>
                                 <td class="text-center">
                                     @forelse($user->roles as $role)
                                         <span class="badge badge-primary">{{ $role->name }}</span>
@@ -74,7 +84,7 @@
                                         <span class="text-muted small">-</span>
                                     @endforelse
                                 </td>
-                                <td class="text-center"><span class="badge badge-info">{{ $user->permissions->count() }}</span></td>
+                                <td class="text-center d-none d-md-table-cell"><span class="badge badge-info">{{ $user->permissions->count() }}</span></td>
                                 <td class="text-right">
                                     <a href="{{ route('permissions.users.show', $user) }}" class="btn btn-sm btn-outline-primary" title="Gestionar permisos">
                                         <i class="fas fa-user-shield"></i> Gestionar

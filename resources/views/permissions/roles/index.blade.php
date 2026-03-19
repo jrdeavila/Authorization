@@ -1,10 +1,6 @@
-@extends('adminlte::page')
+@extends('permissions.layouts.app')
 
 @section('title', 'Gestión de Roles')
-
-@push('css')
-<style>[x-cloak] { display: none !important; }</style>
-@endpush
 
 @section('content_header')
 <h1 class="m-0 text-dark">Gestión de Roles</h1>
@@ -14,7 +10,7 @@
 </ol>
 @endsection
 
-@section('content')
+@section('module_content')
 <div class="container-fluid py-4" x-data="{ confirm: false, roleId: null, roleName: '' }">
 
     @if(session('success'))
@@ -32,7 +28,7 @@
     @endif
 
     <div class="card shadow-sm border-0">
-        <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
+        <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center flex-wrap">
             <h3 class="card-title mb-0"><i class="fas fa-user-tag mr-2"></i>Roles del Sistema</h3>
             <a href="{{ route('permissions.roles.create') }}" class="btn btn-light btn-sm">
                 <i class="fas fa-plus mr-1"></i> Nuevo Rol
@@ -45,7 +41,7 @@
                     <thead class="thead-light">
                         <tr>
                             <th>Nombre</th>
-                            <th class="text-center">Permisos</th>
+                            <th class="text-center d-none d-md-table-cell">Permisos</th>
                             <th class="text-right">Acciones</th>
                         </tr>
                     </thead>
@@ -53,7 +49,7 @@
                         @forelse($roles as $role)
                             <tr>
                                 <td class="font-weight-bold">{{ $role->name }}</td>
-                                <td class="text-center"><span class="badge badge-info">{{ $role->permissions->count() }}</span></td>
+                                <td class="text-center d-none d-md-table-cell"><span class="badge badge-info">{{ $role->permissions->count() }}</span></td>
                                 <td class="text-right">
                                     <a href="{{ route('permissions.roles.edit', $role) }}" class="btn btn-sm btn-outline-primary" title="Editar">
                                         <i class="fas fa-edit"></i>

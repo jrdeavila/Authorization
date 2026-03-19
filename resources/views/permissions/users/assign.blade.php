@@ -1,9 +1,26 @@
-@extends('adminlte::page')
+@extends('permissions.layouts.app')
 
 @section('title', 'Asignar Permisos - ' . ($user->employee->full_name ?? ''))
 
 @push('css')
-<style>[x-cloak] { display: none !important; }</style>
+<style>
+/* User header card responsive */
+@media (max-width: 767.98px) {
+    .user-header-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    .user-header-card img {
+        margin-right: 0 !important;
+        margin-bottom: 1rem;
+    }
+    .user-header-card .btn {
+        margin-left: 0 !important;
+        margin-top: 1rem;
+        width: 100%;
+    }
+}
+</style>
 @endpush
 
 @section('content_header')
@@ -14,7 +31,7 @@
 </ol>
 @endsection
 
-@section('content')
+@section('module_content')
 <div class="container-fluid py-4">
 
     @if(session('success'))
@@ -25,7 +42,7 @@
     @endif
 
     <div class="card shadow-sm border-0 mb-4">
-        <div class="card-body d-flex align-items-center">
+        <div class="card-body d-flex align-items-center flex-wrap user-header-card">
             <img src="{{ $user->employee->curriculum->photo ?? '' }}"
                  alt="Foto de {{ $user->employee->full_name ?? 'usuario' }}"
                  class="img-circle elevation-2 mr-4" style="width:80px; height:80px; object-fit:cover;"

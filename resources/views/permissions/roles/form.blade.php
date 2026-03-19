@@ -1,9 +1,14 @@
-@extends('adminlte::page')
+@extends('permissions.layouts.app')
 
 @section('title', $role ? 'Editar Rol' : 'Nuevo Rol')
 
 @push('css')
-<style>[x-cloak] { display: none !important; }</style>
+<style>
+/* Permission group cards animation */
+.card.mb-2 {
+    transition: box-shadow 0.3s ease;
+}
+</style>
 @endpush
 
 @section('content_header')
@@ -14,7 +19,7 @@
 </ol>
 @endsection
 
-@section('content')
+@section('module_content')
 <div class="container-fluid py-4">
     <div class="row justify-content-center">
         <div class="col-lg-8">

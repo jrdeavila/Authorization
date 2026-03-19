@@ -1,6 +1,17 @@
-@extends('adminlte::page')
+@extends('permissions.layouts.app')
 
 @section('title', 'Auditoría de Permisos')
+
+@push('css')
+<style>
+/* Filter form spacing on mobile */
+@media (max-width: 767.98px) {
+    .filter-form .col-md-3 {
+        margin-bottom: 0.5rem;
+    }
+}
+</style>
+@endpush
 
 @section('content_header')
 <h1 class="m-0 text-dark">Auditoría</h1>
@@ -10,14 +21,14 @@
 </ol>
 @endsection
 
-@section('content')
+@section('module_content')
 <div class="container-fluid py-4">
     <div class="card shadow-sm border-0">
         <div class="card-header bg-gradient-primary text-white">
             <h3 class="card-title mb-0"><i class="fas fa-history mr-2"></i>Registro de Auditoría</h3>
         </div>
         <div class="card-body">
-            <form action="{{ route('permissions.audit.index') }}" method="GET" class="mb-4">
+            <form action="{{ route('permissions.audit.index') }}" method="GET" class="mb-4 filter-form">
                 <div class="row">
                     <div class="col-md-3">
                         <label for="subject_type" class="small font-weight-bold">Tipo de Recurso</label>
@@ -45,14 +56,14 @@
             <div class="table-responsive">
                 <table class="table table-hover table-sm">
                     <thead class="thead-light">
-                        <tr><th>Fecha</th><th>Acción</th><th>Recurso</th><th>Ejecutado por</th></tr>
+                        <tr><th>Fecha</th><th>Acción</th><th class="d-none d-md-table-cell">Recurso</th><th>Ejecutado por</th></tr>
                     </thead>
                     <tbody>
                         @forelse($activities as $activity)
                             <tr>
                                 <td class="text-muted small">{{ $activity->created_at->format('d/m/Y H:i') }}</td>
                                 <td>{{ $activity->description }}</td>
-                                <td>
+                                <td class="d-none d-md-table-cell">
                                     @if($activity->subject_type)
                                         <span class="badge badge-light">{{ class_basename($activity->subject_type) }} #{{ $activity->subject_id }}</span>
                                     @else

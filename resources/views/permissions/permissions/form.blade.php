@@ -1,4 +1,4 @@
-@extends('adminlte::page')
+@extends('permissions.layouts.app')
 
 @section('title', $permission ? 'Editar Permiso' : 'Nuevo Permiso')
 
@@ -10,7 +10,7 @@
 </ol>
 @endsection
 
-@section('content')
+@section('module_content')
 <div class="container-fluid py-4">
     <div class="row justify-content-center">
         <div class="col-lg-6">

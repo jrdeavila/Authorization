@@ -11,7 +11,7 @@
 @endsection
 
 @section('module_content')
-<div class="container-fluid py-4" x-data="{ confirm: false, roleId: null, roleName: '' }">
+<div class="container-fluid py-4">
 
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -54,8 +54,11 @@
                                     <a href="{{ route('permissions.roles.edit', $role) }}" class="btn btn-sm btn-outline-primary" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
+                                    <form id="delete-role-{{ $role->id }}" action="{{ route('permissions.roles.destroy', $role) }}" method="POST" class="d-inline">
+                                        @csrf @method('DELETE')
+                                    </form>
                                     <button type="button" class="btn btn-sm btn-outline-danger"
-                                        @click="confirm = true; roleId = {{ $role->id }}; roleName = '{{ addslashes($role->name) }}'"
+                                        onclick="confirmDelete('delete-role-{{ $role->id }}', '{{ addslashes($role->name) }}', 'el rol')"
                                         title="Eliminar">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
@@ -71,26 +74,5 @@
         <div class="card-footer">{{ $roles->links('pagination::bootstrap-4') }}</div>
     </div>
 
-    <div x-show="confirm" x-cloak class="modal fade show" style="display:block!important; background:rgba(0,0,0,0.5);" @click.self="confirm = false">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title"><i class="fas fa-exclamation-triangle mr-2"></i>Confirmar Eliminación</h5>
-                    <button type="button" class="close text-white" @click="confirm = false" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    <p>¿Eliminar el rol <strong x-text="roleName"></strong>?</p>
-                    <p class="text-muted small">Esta acción no se puede deshacer.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="confirm = false">Cancelar</button>
-                    <form :action="'{{ route('permissions.roles.index') }}/' + roleId" method="POST" class="d-inline">
-                        @csrf @method('DELETE')
-                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt mr-1"></i> Eliminar</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 @endsection

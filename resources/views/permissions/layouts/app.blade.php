@@ -483,7 +483,36 @@ body.dark-mode .main-footer {
         <i class="fas fa-moon" id="dark-mode-icon"></i>
     </button>
 
+    {{-- SweetAlert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        function confirmDelete(formId, itemName, itemLabel) {
+            const isDark = document.body.classList.contains('dark-mode');
+            Swal.fire({
+                title: '¿Eliminar ' + itemLabel + '?',
+                html: '<strong>' + itemName + '</strong><br><small class="text-muted">Esta acción no se puede deshacer.</small>',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '<i class="fas fa-trash-alt mr-1"></i> Eliminar',
+                cancelButtonText: 'Cancelar',
+                background: isDark ? '#1e293b' : '#fff',
+                color: isDark ? '#e2e8f0' : '#333',
+                customClass: {
+                    popup: 'shadow',
+                    confirmButton: 'btn btn-danger mx-1',
+                    cancelButton: 'btn btn-secondary mx-1'
+                },
+                buttonsStyling: false,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(formId).submit();
+                }
+            });
+        }
+
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');

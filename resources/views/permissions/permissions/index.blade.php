@@ -11,7 +11,7 @@
 @endsection
 
 @section('module_content')
-<div class="container-fluid py-4" x-data="{ confirm: false, permId: null, permName: '' }">
+<div class="container-fluid py-4">
 
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -52,8 +52,11 @@
                                 <td class="text-center d-none d-md-table-cell"><span class="badge badge-info">{{ $permission->roles()->count() }}</span></td>
                                 <td class="text-right">
                                     <a href="{{ route('permissions.permissions.edit', $permission) }}" class="btn btn-sm btn-outline-primary" title="Editar"><i class="fas fa-edit"></i></a>
+                                    <form id="delete-perm-{{ $permission->id }}" action="{{ route('permissions.permissions.destroy', $permission) }}" method="POST" class="d-inline">
+                                        @csrf @method('DELETE')
+                                    </form>
                                     <button type="button" class="btn btn-sm btn-outline-danger"
-                                        @click="confirm = true; permId = {{ $permission->id }}; permName = '{{ addslashes($permission->name) }}'" title="Eliminar">
+                                        onclick="confirmDelete('delete-perm-{{ $permission->id }}', '{{ addslashes($permission->name) }}', 'el permiso')" title="Eliminar">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </td>
@@ -68,26 +71,5 @@
         <div class="card-footer">{{ $permissions->links('pagination::bootstrap-4') }}</div>
     </div>
 
-    <div x-show="confirm" x-cloak class="modal fade show" style="display:block!important; background:rgba(0,0,0,0.5);" @click.self="confirm = false">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title"><i class="fas fa-exclamation-triangle mr-2"></i>Confirmar Eliminación</h5>
-                    <button type="button" class="close text-white" @click="confirm = false" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    <p>¿Eliminar el permiso <strong><code x-text="permName"></code></strong>?</p>
-                    <p class="text-muted small">Si está asignado a roles, no se podrá eliminar.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="confirm = false">Cancelar</button>
-                    <form :action="'{{ route('permissions.permissions.index') }}/' + permId" method="POST" class="d-inline">
-                        @csrf @method('DELETE')
-                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt mr-1"></i> Eliminar</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 @endsection

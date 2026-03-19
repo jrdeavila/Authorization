@@ -4,42 +4,79 @@
 
 @push('css')
 <style>
-/* Stat Cards */
+/* ==============================
+   HERO WELCOME
+   ============================== */
+.hero-welcome {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+    border-radius: 18px;
+    padding: 28px 30px;
+    color: #fff;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 30px rgba(30,58,138,0.25);
+    position: relative;
+    overflow: hidden;
+}
+.hero-welcome::after {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -10%;
+    width: 200px;
+    height: 200px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+}
+.hero-welcome h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0 0 4px;
+    color: #fff;
+}
+.hero-welcome p {
+    font-size: 0.88rem;
+    opacity: 0.8;
+    margin: 0;
+}
+
+/* ==============================
+   STAT CARDS
+   ============================== */
 .stat-card {
-    border: none;
-    border-radius: 14px;
+    border-radius: 16px !important;
     overflow: hidden;
     height: 100%;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 .stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.12) !important;
+    transform: translateY(-5px);
+    box-shadow: 0 14px 35px rgba(0,0,0,0.12) !important;
 }
 .stat-card .card-body {
     height: 100%;
     min-height: 90px;
+    padding: 20px;
 }
 .stat-icon {
-    width: 56px;
-    height: 56px;
-    min-width: 56px;
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
     border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
+    font-size: 20px;
 }
 .stat-value {
-    font-size: 1.8rem;
+    font-size: 1.7rem;
     font-weight: 800;
     line-height: 1;
     color: #1e293b;
-    min-width: 40px;
+    min-width: 36px;
 }
 .stat-label {
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: 0.7rem;
+    font-weight: 700;
     color: #64748b;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -47,42 +84,53 @@
     line-height: 1.2;
 }
 
-/* Activity timeline */
+/* Dark mode stat values */
+body.dark-mode .stat-value { color: #f1f5f9; }
+body.dark-mode .stat-label { color: #94a3b8; }
+body.dark-mode .hero-welcome { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); }
+
+/* ==============================
+   ACTIVITY TIMELINE
+   ============================== */
 .activity-item {
     display: flex;
     gap: 12px;
-    padding: 10px 0;
+    padding: 12px 8px;
     border-bottom: 1px solid #f1f5f9;
+    border-radius: 8px;
     transition: background 0.15s ease;
 }
-.activity-item:last-child {
-    border-bottom: none;
-}
-.activity-item:hover {
-    background: #f8fafc;
-    border-radius: 8px;
-    padding-left: 8px;
-    margin-left: -8px;
-}
+.activity-item:last-child { border-bottom: none; }
+.activity-item:hover { background: #f8fafc; }
+body.dark-mode .activity-item { border-bottom-color: #334155; }
+body.dark-mode .activity-item:hover { background: rgba(255,255,255,0.03); }
+
 .activity-dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    margin-top: 6px;
+    margin-top: 5px;
     flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
 }
 .activity-text {
     flex: 1;
     font-size: 0.85rem;
     color: #334155;
+    line-height: 1.4;
 }
+body.dark-mode .activity-text { color: #cbd5e1; }
+
 .activity-time {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: #94a3b8;
     white-space: nowrap;
+    font-weight: 500;
 }
 
-/* New user row */
+/* ==============================
+   NEW USER ROWS
+   ============================== */
 .new-user-row {
     transition: transform 0.15s ease, background 0.15s ease;
 }
@@ -90,21 +138,42 @@
     transform: translateX(3px);
 }
 
-/* Responsive */
-@media (max-width: 767.98px) {
-    .stat-value { font-size: 1.4rem; }
-    .stat-icon { width: 44px; height: 44px; min-width: 44px; font-size: 18px; }
-    .stat-card .card-body { padding: 1rem; min-height: 76px; }
-    .stat-label { font-size: 0.65rem; }
+/* ==============================
+   EMPTY STATE
+   ============================== */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+}
+.empty-state-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    font-size: 1.5rem;
+    color: #94a3b8;
+}
+body.dark-mode .empty-state-icon { background: #334155; }
+
+/* ==============================
+   RESPONSIVE
+   ============================== */
+@media (max-width: 991.98px) {
+    .hero-welcome { padding: 22px 20px; }
+    .hero-welcome h2 { font-size: 1.15rem; }
+    .stat-value { font-size: 1.35rem; }
+    .stat-icon { width: 44px; height: 44px; min-width: 44px; font-size: 17px; }
+    .stat-card .card-body { padding: 14px; min-height: 74px; }
+    .stat-label { font-size: 0.6rem; }
 }
 </style>
 @endpush
 
 @section('content_header')
-<h1 class="m-0 text-dark">Dashboard</h1>
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item active">Inicio</li>
-</ol>
 @endsection
 
 @section('module_content')
@@ -117,12 +186,20 @@
         </div>
     @endif
 
+    {{-- Hero Welcome --}}
+    @auth
+    <div class="hero-welcome">
+        <h2><i class="fas fa-shield-alt mr-2"></i>Gestión de Permisos</h2>
+        <p>Bienvenido, {{ auth()->user()->employee->full_name ?? 'Administrador' }}</p>
+    </div>
+    @endauth
+
     {{-- Stat Cards --}}
     <div class="row mb-4">
         <div class="col-lg-3 col-6 mb-3">
             <div class="card stat-card shadow-sm">
                 <div class="card-body d-flex align-items-center">
-                    <div class="stat-icon bg-primary text-white mr-3">
+                    <div class="stat-icon mr-3" style="background:#dbeafe; color:#1d4ed8;">
                         <i class="fas fa-users"></i>
                     </div>
                     <div>
@@ -136,7 +213,7 @@
         <div class="col-lg-3 col-6 mb-3">
             <div class="card stat-card shadow-sm">
                 <div class="card-body d-flex align-items-center">
-                    <div class="stat-icon bg-success text-white mr-3">
+                    <div class="stat-icon mr-3" style="background:#d1fae5; color:#059669;">
                         <i class="fas fa-user-shield"></i>
                     </div>
                     <div>
@@ -150,7 +227,7 @@
         <div class="col-lg-3 col-6 mb-3">
             <div class="card stat-card shadow-sm">
                 <div class="card-body d-flex align-items-center">
-                    <div class="stat-icon bg-info text-white mr-3">
+                    <div class="stat-icon mr-3" style="background:#e0e7ff; color:#4338ca;">
                         <i class="fas fa-user-tag"></i>
                     </div>
                     <div>
@@ -164,7 +241,7 @@
         <div class="col-lg-3 col-6 mb-3">
             <div class="card stat-card shadow-sm">
                 <div class="card-body d-flex align-items-center">
-                    <div class="stat-icon bg-warning text-white mr-3">
+                    <div class="stat-icon mr-3" style="background:#fef3c7; color:#d97706;">
                         <i class="fas fa-key"></i>
                     </div>
                     <div>
@@ -191,7 +268,7 @@
                             <div class="activity-text">
                                 {{ $activity->description }}
                                 @if($activity->causer)
-                                    <span class="text-muted">— {{ $activity->causer->employee->full_name ?? 'Usuario #' . $activity->causer_id }}</span>
+                                    <br><small class="text-muted">{{ $activity->causer->employee->full_name ?? 'Usuario #' . $activity->causer_id }}</small>
                                 @endif
                             </div>
                             <div class="activity-time">
@@ -199,10 +276,12 @@
                             </div>
                         </div>
                     @empty
-                        <div class="text-center text-muted py-4">
-                            <i class="fas fa-clipboard-list fa-2x mb-3 d-block" style="opacity:0.3"></i>
-                            <p class="mb-0">No hay actividad registrada aún.</p>
-                            <small>Las acciones sobre roles y permisos aparecerán aquí.</small>
+                        <div class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <p class="font-weight-bold mb-1">Sin actividad</p>
+                            <small class="text-muted">Las acciones sobre roles y permisos aparecerán aquí.</small>
                         </div>
                     @endforelse
                 </div>
@@ -222,13 +301,13 @@
                             <tbody>
                                 @forelse($newUsers as $user)
                                     <tr class="new-user-row">
-                                        <td class="py-3">
+                                        <td class="py-3 pl-3">
                                             <div class="d-flex align-items-center">
                                                 <img src="{{ $user->employee->curriculum->photo ?? '' }}"
                                                      alt="{{ $user->employee->full_name ?? 'usuario' }}"
                                                      class="img-circle mr-3"
-                                                     style="width:36px; height:36px; object-fit:cover; border:2px solid #e2e8f0;"
-                                                     onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($user->employee->full_name ?? 'U') }}&size=36&background=28a745&color=fff'">
+                                                     style="width:40px; height:40px; object-fit:cover; border:2px solid #e2e8f0;"
+                                                     onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($user->employee->full_name ?? 'U') }}&size=40&background=28a745&color=fff'">
                                                 <div style="min-width:0">
                                                     <div class="font-weight-bold text-truncate">{{ $user->employee->full_name ?? 'N/A' }}</div>
                                                     <small class="text-muted text-truncate d-block">{{ $user->employee->job->name ?? 'Sin cargo' }}</small>
@@ -242,7 +321,7 @@
                                                 <span class="badge badge-light">Sin rol</span>
                                             @endforelse
                                         </td>
-                                        <td class="text-right align-middle" style="width:40px">
+                                        <td class="text-right align-middle pr-3" style="width:40px">
                                             <a href="{{ route('permissions.users.show', $user) }}" class="text-primary" title="Gestionar">
                                                 <i class="fas fa-chevron-right"></i>
                                             </a>

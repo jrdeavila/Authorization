@@ -1,361 +1,372 @@
-{{-- Bottom App Bar — Solo visible en móvil --}}
-<div x-data="{ menuOpen: false, userOpen: false }"
-     class="bottom-appbar d-block d-md-none"
-     @keydown.escape.window="menuOpen = false; userOpen = false">
+{{-- Bottom App Bar — Mobile & Tablet --}}
+<div x-data="{ moreOpen: false }" class="d-block d-lg-none">
 
-    {{-- Overlay --}}
-    <div x-show="menuOpen || userOpen" x-cloak
-         class="bottom-appbar-overlay"
-         @click="menuOpen = false; userOpen = false"
-         x-transition:enter="transition-fast"
+    {{-- Backdrop --}}
+    <div class="mob-sheet-backdrop" x-show="moreOpen" x-cloak
+         x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
-         x-transition:leave="transition-fast"
+         x-transition:leave="transition ease-in duration-150"
          x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0">
+         x-transition:leave-end="opacity-0"
+         @click="moreOpen = false">
     </div>
 
-    {{-- Popup Menú --}}
-    <div x-show="menuOpen" x-cloak
-         class="bottom-appbar-popup"
-         x-transition:enter="transition-slide-up"
-         x-transition:enter-start="translate-y-full"
-         x-transition:enter-end="translate-y-0"
-         x-transition:leave="transition-slide-up"
-         x-transition:leave-start="translate-y-0"
-         x-transition:leave-end="translate-y-full"
-         @click.outside="menuOpen = false">
-        <div class="popup-header">
-            <span class="popup-title">Gestión de Permisos</span>
-            <button @click="menuOpen = false" class="popup-close" aria-label="Cerrar">&times;</button>
+    {{-- More Sheet --}}
+    <div class="mob-more-sheet" x-show="moreOpen" x-cloak
+         x-transition:enter="sheet-enter"
+         x-transition:enter-start="sheet-enter-from"
+         x-transition:enter-end="sheet-enter-to"
+         x-transition:leave="sheet-leave"
+         x-transition:leave-start="sheet-leave-from"
+         x-transition:leave-end="sheet-leave-to"
+         @click.outside="moreOpen = false">
+
+        {{-- Handle --}}
+        <div class="mob-sheet-handle"></div>
+
+        {{-- Header: user info --}}
+        @auth
+        @php
+            $authEmployee = optional(auth()->user()->employee);
+            $authName     = $authEmployee->full_name ?: auth()->user()->email;
+            $authEmail    = auth()->user()->email;
+            $authPhoto    = optional($authEmployee->curriculum)->photo;
+            $authInitial  = strtoupper(substr($authName, 0, 1));
+            $authJob      = optional($authEmployee->job)->name ?? '';
+        @endphp
+        <div class="mob-sheet-header">
+            <div class="mob-sheet-avatar">
+                @if($authPhoto)
+                    <img src="{{ $authPhoto }}" alt="{{ $authName }}"
+                         style="width:100%;height:100%;object-fit:cover;border-radius:50%;"
+                         onerror="this.textContent='{{ $authInitial }}';this.style.display='none';this.parentElement.textContent='{{ $authInitial }}'">
+                @else
+                    {{ $authInitial }}
+                @endif
+            </div>
+            <div style="min-width:0;">
+                <div class="mob-sheet-user-name">{{ $authName }}</div>
+                <div class="mob-sheet-user-email">{{ $authEmail }}</div>
+                @if($authJob)
+                    <div class="mob-sheet-user-email">{{ $authJob }}</div>
+                @endif
+            </div>
+            <button class="mob-sheet-close" @click="moreOpen = false" type="button">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-        <nav class="popup-nav">
-            <a href="{{ route('permissions.roles.index') }}" class="popup-item {{ request()->routeIs('permissions.roles.*') ? 'active' : '' }}">
-                <i class="fas fa-user-tag"></i><span>Roles</span>
+        @endauth
+
+        {{-- Body --}}
+        <div class="mob-sheet-body">
+
+            {{-- Navegación — Grid 3 columnas --}}
+            <p class="mob-sheet-section-title">Gestión de Permisos</p>
+            <div class="mob-sheet-grid">
+                <a href="{{ route('permissions.roles.index') }}" class="mob-sheet-card {{ request()->routeIs('permissions.roles.*') ? 'active' : '' }}">
+                    <i class="fas fa-user-tag"></i><span>Roles</span>
+                </a>
+                <a href="{{ route('permissions.permissions.index') }}" class="mob-sheet-card {{ request()->routeIs('permissions.permissions.*') ? 'active' : '' }}">
+                    <i class="fas fa-key"></i><span>Permisos</span>
+                </a>
+                <a href="{{ route('permissions.users.index') }}" class="mob-sheet-card {{ request()->routeIs('permissions.users.*') ? 'active' : '' }}">
+                    <i class="fas fa-users"></i><span>Funcionarios</span>
+                </a>
+            </div>
+
+            {{-- Opciones — List rows --}}
+            <p class="mob-sheet-section-title">Opciones</p>
+            <a href="{{ route('permissions.audit.index') }}" class="mob-sheet-row">
+                <span class="row-icon"><i class="fas fa-history"></i></span>
+                Auditoría
+                <i class="fas fa-chevron-right row-chevron"></i>
             </a>
-            <a href="{{ route('permissions.permissions.index') }}" class="popup-item {{ request()->routeIs('permissions.permissions.*') ? 'active' : '' }}">
-                <i class="fas fa-key"></i><span>Permisos</span>
+            <a href="{{ route('permissions.reports.pdf') }}" class="mob-sheet-row">
+                <span class="row-icon"><i class="fas fa-file-pdf"></i></span>
+                Exportar PDF
+                <i class="fas fa-chevron-right row-chevron"></i>
             </a>
-            <a href="{{ route('permissions.users.index') }}" class="popup-item {{ request()->routeIs('permissions.users.*') ? 'active' : '' }}">
-                <i class="fas fa-users"></i><span>Funcionarios</span>
+            <a href="{{ route('permissions.reports.excel') }}" class="mob-sheet-row">
+                <span class="row-icon"><i class="fas fa-file-excel"></i></span>
+                Exportar Excel
+                <i class="fas fa-chevron-right row-chevron"></i>
             </a>
-            <a href="{{ route('permissions.audit.index') }}" class="popup-item {{ request()->routeIs('permissions.audit.*') ? 'active' : '' }}">
-                <i class="fas fa-history"></i><span>Auditoría</span>
+            <a href="{{ route('home') }}" class="mob-sheet-row">
+                <span class="row-icon"><i class="fas fa-home"></i></span>
+                Inicio
+                <i class="fas fa-chevron-right row-chevron"></i>
             </a>
-        </nav>
+
+            {{-- Logout --}}
+            <form method="POST" action="{{ route('logout') }}" class="mb-0">
+                @csrf
+                <button type="submit" class="mob-sheet-logout">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                </button>
+            </form>
+
+        </div>
     </div>
 
-    {{-- Popup Usuario --}}
-    <div x-show="userOpen" x-cloak
-         class="bottom-appbar-popup"
-         x-transition:enter="transition-slide-up"
-         x-transition:enter-start="translate-y-full"
-         x-transition:enter-end="translate-y-0"
-         x-transition:leave="transition-slide-up"
-         x-transition:leave-start="translate-y-0"
-         x-transition:leave-end="translate-y-full"
-         @click.outside="userOpen = false">
-        <div class="popup-header">
-            <span class="popup-title">Mi Cuenta</span>
-            <button @click="userOpen = false" class="popup-close" aria-label="Cerrar">&times;</button>
-        </div>
-        <div class="popup-user-info">
-            @auth
-                <div class="user-card">
-                    <img src="{{ auth()->user()->employee->curriculum->photo ?? '' }}"
-                         class="user-avatar"
-                         onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->employee->full_name ?? 'U') }}&size=48&background=4e73df&color=fff'"
-                         alt="Avatar">
-                    <div class="user-details">
-                        <strong>{{ auth()->user()->employee->full_name ?? 'Usuario' }}</strong>
-                        <small>{{ auth()->user()->email }}</small>
-                        <small class="text-muted">{{ auth()->user()->employee->job->name ?? '' }}</small>
-                    </div>
-                </div>
-            @endauth
-        </div>
-        <nav class="popup-nav">
-            <a href="{{ route('home') }}" class="popup-item">
-                <i class="fas fa-home"></i><span>Inicio</span>
-            </a>
-            <a href="{{ route('logout') }}" class="popup-item popup-item-danger"
-               onclick="event.preventDefault(); document.getElementById('bottom-logout-form').submit();">
-                <i class="fas fa-sign-out-alt"></i><span>Cerrar Sesión</span>
-            </a>
-            <form id="bottom-logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">@csrf</form>
-        </nav>
-    </div>
+    {{-- Bottom bar --}}
+    <div class="mob-bottom-nav">
+        <a href="{{ route('home') }}"
+           class="mob-bnav-item {{ request()->routeIs('home') ? 'active' : '' }}">
+            <i class="fas fa-home"></i>
+            <span>Inicio</span>
+        </a>
 
-    {{-- Barra inferior --}}
-    <nav class="bottom-appbar-bar">
         <a href="{{ route('permissions.roles.index') }}"
-           class="bar-item {{ request()->routeIs('permissions.roles.*') ? 'active' : '' }}">
+           class="mob-bnav-item {{ request()->routeIs('permissions.roles.*') ? 'active' : '' }}">
             <i class="fas fa-user-tag"></i>
             <span>Roles</span>
         </a>
 
-        <a href="{{ route('permissions.users.index') }}"
-           class="bar-item {{ request()->routeIs('permissions.users.*') ? 'active' : '' }}">
-            <i class="fas fa-users"></i>
-            <span>Funcionarios</span>
-        </a>
-
-        <button @click="menuOpen = !menuOpen; userOpen = false"
-                class="bar-item" :class="{ 'active': menuOpen }">
+        <button type="button" class="mob-bnav-item" :class="{ 'active': moreOpen }"
+                @click="moreOpen = !moreOpen" style="flex:0.8;">
             <i class="fas fa-th"></i>
             <span>Menú</span>
         </button>
 
-        <button @click="userOpen = !userOpen; menuOpen = false"
-                class="bar-item bar-item-avatar" :class="{ 'active': userOpen }">
+        <button type="button" class="mob-bnav-item" :class="{ 'active': moreOpen }"
+                @click="moreOpen = !moreOpen">
             @auth
-                <img src="{{ auth()->user()->employee->curriculum->photo ?? '' }}"
-                     class="bar-avatar"
-                     onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->employee->full_name ?? 'U') }}&size=28&background=4e73df&color=fff'"
-                     alt="Mi cuenta">
+                @if($authPhoto)
+                    <img src="{{ $authPhoto }}" class="mob-bnav-avatar"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+                         alt="Mi cuenta">
+                    <i class="fas fa-user-circle" style="display:none"></i>
+                @else
+                    <i class="fas fa-user-circle"></i>
+                @endif
             @else
                 <i class="fas fa-user-circle"></i>
             @endauth
             <span>Cuenta</span>
         </button>
-    </nav>
+    </div>
+
 </div>
 
 <style>
 /* ==============================
-   BOTTOM APP BAR — Mobile Only
+   BOTTOM NAV BAR
    ============================== */
-.bottom-appbar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1050;
+.mob-bottom-nav {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 1040;
+    background: #fff; border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -4px 16px rgba(0,0,0,.1);
+    min-height: 62px;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+@media (max-width: 991.98px) {
+    .mob-bottom-nav { display: flex !important; }
 }
 
-.bottom-appbar-bar {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background: #fff;
-    border-top: 1px solid #e2e8f0;
-    padding: 6px 0 env(safe-area-inset-bottom, 6px);
-    box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
+.mob-bnav-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 3px; padding: 6px 4px;
+    text-decoration: none !important; color: #9ca3af; border: none; background: none;
+    font-size: .57rem; font-weight: 700; text-transform: uppercase; letter-spacing: .4px;
+    cursor: pointer; position: relative; transition: color .15s;
+}
+.mob-bnav-item.active,
+.mob-bnav-item:hover { color: #1d4ed8; }
+.mob-bnav-item.active::after {
+    content: ''; position: absolute; top: 0; left: 25%; right: 25%;
+    height: 2.5px; background: #1d4ed8; border-radius: 0 0 3px 3px;
+}
+.mob-bnav-item i { font-size: 1.2rem; }
+
+.mob-bnav-avatar {
+    width: 24px; height: 24px; border-radius: 50%; object-fit: cover;
+    border: 2px solid #e2e8f0; transition: border-color .2s;
+}
+.mob-bnav-item.active .mob-bnav-avatar { border-color: #1d4ed8; }
+
+/* ==============================
+   SHEET BACKDROP
+   ============================== */
+.mob-sheet-backdrop {
+    position: fixed; inset: 0; z-index: 1041;
+    background: rgba(15,23,42,.5);
 }
 
-.bar-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    padding: 6px 4px;
-    color: #94a3b8;
-    text-decoration: none !important;
-    font-size: 10px;
-    font-weight: 600;
-    border: none;
-    background: none;
-    cursor: pointer;
-    transition: color 0.2s ease, transform 0.15s ease;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.bar-item i {
-    font-size: 18px;
-    margin-bottom: 2px;
-    transition: transform 0.2s ease;
-}
-
-.bar-item.active {
-    color: #4e73df;
-}
-
-.bar-item.active i {
-    transform: scale(1.15);
-}
-
-.bar-avatar {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #e2e8f0;
-    transition: border-color 0.2s ease, transform 0.2s ease;
-}
-
-.bar-item.active .bar-avatar {
-    border-color: #4e73df;
-    transform: scale(1.15);
-}
-
-.bar-item:active {
-    transform: scale(0.92);
-}
-
-/* Overlay */
-.bottom-appbar-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 1049;
-    backdrop-filter: blur(2px);
-}
-
-/* Popup */
-.bottom-appbar-popup {
-    position: fixed;
-    bottom: 60px;
-    left: 8px;
-    right: 8px;
-    z-index: 1051;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 -4px 30px rgba(0,0,0,0.15);
+/* ==============================
+   SHEET PANEL
+   ============================== */
+.mob-more-sheet {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 1042;
+    background: #fff; border-radius: 22px 22px 0 0;
+    max-height: 86vh; display: flex; flex-direction: column;
     overflow: hidden;
-    max-height: 70vh;
-    overflow-y: auto;
+    box-shadow: 0 -8px 40px rgba(0,0,0,.18);
 }
 
-.popup-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 18px;
-    border-bottom: 1px solid #f1f5f9;
-    background: #f8fafc;
+/* Sheet transitions */
+.sheet-enter { transition: transform .32s cubic-bezier(.32,1,.23,1), opacity .22s ease; }
+.sheet-enter-from { transform: translateY(100%); opacity: 0; }
+.sheet-enter-to   { transform: translateY(0);    opacity: 1; }
+.sheet-leave      { transition: transform .22s ease-in, opacity .18s ease; }
+.sheet-leave-from { transform: translateY(0);    opacity: 1; }
+.sheet-leave-to   { transform: translateY(100%); opacity: 0; }
+
+.mob-sheet-handle {
+    width: 38px; height: 4px; background: #d1d5db;
+    border-radius: 2px; margin: 10px auto 0; flex-shrink: 0;
 }
 
-.popup-title {
-    font-weight: 700;
-    font-size: 14px;
-    color: #1e293b;
+/* ==============================
+   SHEET HEADER (user info)
+   ============================== */
+.mob-sheet-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+    padding: 14px 18px 18px;
+    display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+}
+.mob-sheet-avatar {
+    width: 46px; height: 46px; border-radius: 50%;
+    background: rgba(255,255,255,.2); border: 2px solid rgba(255,255,255,.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; font-weight: 800; color: #fff; flex-shrink: 0;
+    overflow: hidden;
+}
+.mob-sheet-user-name { font-size: .95rem; font-weight: 700; color: #fff; line-height: 1.25; }
+.mob-sheet-user-email { font-size: .72rem; color: rgba(255,255,255,.65); margin-top: 2px; }
+.mob-sheet-close {
+    margin-left: auto; width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(255,255,255,.15); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,.85); font-size: .8rem; flex-shrink: 0;
 }
 
-.popup-close {
-    background: none;
-    border: none;
-    font-size: 22px;
-    color: #94a3b8;
-    cursor: pointer;
-    padding: 0 4px;
-    line-height: 1;
+/* ==============================
+   SHEET BODY
+   ============================== */
+.mob-sheet-body {
+    overflow-y: auto; flex: 1;
+    padding: 12px 14px calc(16px + env(safe-area-inset-bottom, 0));
+}
+.mob-sheet-section-title {
+    font-size: .62rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: .7px; color: #9ca3af; padding: 10px 2px 6px; margin: 0;
 }
 
-.popup-nav {
-    padding: 8px;
+/* ==============================
+   GRID CARDS (3 columnas)
+   ============================== */
+.mob-sheet-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 2px;
+}
+.mob-sheet-card {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 14px 4px 11px; background: #f5f8ff;
+    border: 1px solid #e0e7ff; border-radius: 14px;
+    text-decoration: none !important; color: #1e293b; cursor: pointer;
+    transition: background .12s, transform .1s;
+}
+.mob-sheet-card:active { transform: scale(.95); background: #e0e7ff; }
+.mob-sheet-card.active { background: #dbeafe; border-color: #93c5fd; }
+.mob-sheet-card i { font-size: 1.25rem; color: #1d4ed8; }
+.mob-sheet-card span { font-size: .62rem; font-weight: 700; text-align: center; line-height: 1.25; color: #374151; }
+
+/* ==============================
+   LIST ROWS
+   ============================== */
+.mob-sheet-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 8px; border-radius: 10px;
+    text-decoration: none !important; color: #1e293b;
+    font-size: .85rem; font-weight: 600;
+    transition: background .12s;
+}
+.mob-sheet-row:active { background: #f1f5f9; }
+.mob-sheet-row .row-icon {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: #eef2ff; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+}
+.mob-sheet-row .row-icon i { font-size: .9rem; color: #1d4ed8; }
+.mob-sheet-row .row-chevron { margin-left: auto; color: #d1d5db; font-size: .7rem; }
+
+/* ==============================
+   LOGOUT
+   ============================== */
+.mob-sheet-logout {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 13px; margin-top: 10px;
+    background: #fff0f0; border: 1.5px solid #fecaca;
+    border-radius: 12px; color: #dc2626;
+    font-size: .88rem; font-weight: 700; cursor: pointer;
+    transition: background .12s;
+}
+.mob-sheet-logout:active { background: #fee2e2; }
+
+/* ==============================
+   DARK MODE
+   ============================== */
+/* Bottom nav bar */
+body.dark-mode .mob-bottom-nav {
+    background: #1e293b;
+    border-top-color: #334155;
+    box-shadow: 0 -4px 16px rgba(0,0,0,.3);
+}
+body.dark-mode .mob-bnav-item { color: #64748b; }
+body.dark-mode .mob-bnav-item.active,
+body.dark-mode .mob-bnav-item:hover { color: #60a5fa; }
+body.dark-mode .mob-bnav-item.active::after { background: #60a5fa; }
+body.dark-mode .mob-bnav-avatar { border-color: #475569; }
+body.dark-mode .mob-bnav-item.active .mob-bnav-avatar { border-color: #60a5fa; }
+
+/* Sheet panel */
+body.dark-mode .mob-more-sheet {
+    background: #1e293b;
+    box-shadow: 0 -8px 40px rgba(0,0,0,.4);
+}
+body.dark-mode .mob-sheet-handle { background: #475569; }
+
+/* Sheet header */
+body.dark-mode .mob-sheet-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
 }
 
-.popup-item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 12px 14px;
-    color: #334155;
-    text-decoration: none !important;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: background 0.15s ease;
+/* Sheet body */
+body.dark-mode .mob-sheet-section-title { color: #64748b; }
+
+/* Grid cards */
+body.dark-mode .mob-sheet-card {
+    background: #334155;
+    border-color: #475569;
+    color: #e2e8f0;
 }
+body.dark-mode .mob-sheet-card:active { background: #475569; }
+body.dark-mode .mob-sheet-card.active { background: #1e3a8a; border-color: #3b82f6; }
+body.dark-mode .mob-sheet-card i { color: #60a5fa; }
+body.dark-mode .mob-sheet-card span { color: #cbd5e1; }
 
-.popup-item i {
-    width: 22px;
-    text-align: center;
-    font-size: 16px;
-    color: #64748b;
+/* List rows */
+body.dark-mode .mob-sheet-row { color: #e2e8f0; }
+body.dark-mode .mob-sheet-row:active { background: #334155; }
+body.dark-mode .mob-sheet-row .row-icon { background: #334155; }
+body.dark-mode .mob-sheet-row .row-icon i { color: #60a5fa; }
+body.dark-mode .mob-sheet-row .row-chevron { color: #475569; }
+
+/* Logout */
+body.dark-mode .mob-sheet-logout {
+    background: #3b1c1c;
+    border-color: #7f1d1d;
+    color: #fca5a5;
 }
+body.dark-mode .mob-sheet-logout:active { background: #4c1d1d; }
 
-.popup-item:hover,
-.popup-item:active {
-    background: #f1f5f9;
-    color: #1e293b;
-}
+/* Backdrop */
+body.dark-mode .mob-sheet-backdrop { background: rgba(0,0,0,.65); }
 
-.popup-item.active {
-    background: #eef2ff;
-    color: #4e73df;
-}
-
-.popup-item.active i {
-    color: #4e73df;
-}
-
-.popup-item-danger {
-    color: #dc3545 !important;
-}
-
-.popup-item-danger i {
-    color: #dc3545 !important;
-}
-
-/* User Card */
-.popup-user-info {
-    padding: 16px 18px;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-.user-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.user-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #e2e8f0;
-}
-
-.user-details {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.3;
-}
-
-.user-details strong {
-    font-size: 14px;
-    color: #1e293b;
-}
-
-.user-details small {
-    font-size: 12px;
-    color: #64748b;
-}
-
-/* Transitions */
-.transition-fast {
-    transition: opacity 0.2s ease;
-}
-
-.opacity-0 { opacity: 0; }
-.opacity-100 { opacity: 1; }
-
-.transition-slide-up {
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.translate-y-full { transform: translateY(100%); }
-.translate-y-0 { transform: translateY(0); }
-
-/* Padding inferior para que el contenido no quede debajo del bar */
-@media (max-width: 767.98px) {
-    .content-wrapper {
-        padding-bottom: 70px !important;
-    }
-    /* Ocultar sidebar en móvil cuando hay bottom appbar */
-    .main-sidebar {
-        display: none !important;
-    }
-    .content-wrapper,
-    .main-footer {
-        margin-left: 0 !important;
-    }
-    /* Ocultar toggle del sidebar en navbar */
-    .navbar .nav-item .nav-link[data-widget="pushmenu"] {
-        display: none !important;
-    }
+/* Navbar superior */
+body.dark-mode .main-header.navbar {
+    background: #1e293b !important;
+    border-bottom-color: #334155 !important;
 }
 </style>
